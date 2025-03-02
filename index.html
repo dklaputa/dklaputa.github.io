@@ -1,0 +1,640 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ポートフォリオ - ゲームプログラマー</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;700&display=swap">
+    <style>
+        /* 全体的なスタイルのリセットと基本設定 */
+        *, ::before, ::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Noto Sans JP', sans-serif;
+            background-color: #181818; /* より濃いダークグレーの背景 */
+            color: #f5f5f5; /* 非常に明るいグレーの文字色 */
+            line-height: 1.7;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        /* ヘッダーセクション */
+        header {
+            background-color: #222; /* ヘッダー背景色を少し濃く */
+            padding: 50px 0; /* ヘッダーの縦幅を少し広げる */
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+            margin-bottom: 20px; /* ヘッダーとコンテンツの間隔 */
+        }
+
+        header h1 {
+            margin: 0 0 10px 0; /* タイトル下の余白を追加 */
+            font-size: 2.7em; /* タイトルを少し大きく */
+            font-weight: 700;
+            letter-spacing: 0.1em;
+            color: #fff; /* タイトル色を白に */
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.4); /* 影を少し強く */
+        }
+
+        header p {
+            font-size: 1.2em;
+            color: #ddd; /* サブタイトルの色 */
+            margin-bottom: 20px; /* サブタイトル下の余白 */
+        }
+
+
+        header canvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            opacity: 0.8; /* パーティクルの透明度を調整 */
+        }
+
+        /* コンテナ */
+        .container {
+            width: 90%; /* コンテナ幅をさらに広げる */
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 60px; /* コンテナのパディングを大きく */
+            background-color: #222; /* コンテナ背景色をヘッダーと同じに */
+            border-radius: 12px; /* 角丸を大きく */
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4); /* 影をより強く、広範囲に */
+        }
+
+        /* セクション共通スタイル */
+        section {
+            margin-bottom: 70px; /* セクション間隔をさらに広げる */
+        }
+
+        section:last-child {
+            margin-bottom: 0; /* 最後のセクションの下マージンを削除 */
+        }
+
+        section h2 {
+            color: #ffdd5e; /* セクションタイトル色をより明るい黄色に */
+            border-bottom: 3px solid #ffdd5e;
+            padding-bottom: 15px;
+            font-size: 2.4em; /* セクションタイトルを大きく */
+            margin-bottom: 30px; /* セクションタイトル下の余白を広げる */
+            font-weight: bold;
+            letter-spacing: 0.08em;
+        }
+
+        section p, section li {
+            font-size: 1.15em; /* 本文の文字サイズを少し大きく */
+            color: #e0e0e0;
+            line-height: 1.8; /* 行間を少し広げる */
+        }
+
+        /* 職務経歴セクション */
+        #experience .job-history {
+            margin-left: 0; /* 左マージンをなくす */
+            padding-left: 20px;
+            border-left: 3px solid #555; /* 左側に縦線を追加 */
+        }
+
+        #experience .job-history p {
+            margin: 15px 0;
+        }
+
+        #experience .job-history strong {
+            color: #fff;
+            font-weight: 600;
+        }
+
+
+        /* スキルセクション */
+        #skills ul.skills-list {
+            margin-top: 20px; /* スキルリスト上部の余白 */
+            margin-left: 25px;
+            gap: 20px; /* スキル間のギャップを広げる */
+        }
+
+/*        #skills ul.skills-list li {
+            background-color: #333;
+            padding: 15px 20px;  スキル項目のパディングを大きく 
+            border-radius: 7px;
+            box-shadow: 0 3px 7px rgba(0, 0, 0, 0.25);
+            transition: transform 0.25s ease-in-out, box-shadow 0.25s ease-in-out;  ボックスシャドウもトランジションに追加 
+            border: 1px solid transparent;  通常時は透明なボーダー 
+        }*/
+
+        /*#skills ul.skills-list li:hover {
+            transform: translateY(-5px);*/ /* ホバー時により大きく浮き上がる */
+            /*box-shadow: 0 6px 15px rgba(0, 0, 0, 0.35);*/ /* ホバー時の影をより強く */
+            /*border-color: #ffdd5e;*/ /* ホバー時にボーダーを表示 */
+        /*}*/
+
+        /* スキル熟練度セクション */
+        #skill-proficiency {
+            margin-top: 30px;
+        }
+
+        #skill-proficiency table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+            background-color: #2a2a2a;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 5px 12px rgba(0, 0, 0, 0.3);
+        }
+
+        #skill-proficiency th,
+        #skill-proficiency td {
+            padding: 15px 20px;
+            text-align: left;
+            border-bottom: 1px solid #333;
+        }
+
+        #skill-proficiency th {
+            font-weight: bold;
+            color: #eee;
+            background-color: #333;
+        }
+
+        #skill-proficiency td {
+            color: #ddd;
+        }
+
+        #skill-proficiency tr:last-child td {
+            border-bottom: none;
+        }
+
+
+        /* プロジェクトセクション */
+        #projects-content {
+            display: grid; /* グリッドレイアウトを適用 */
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); /* 最小幅350px、最大フレキシブルな列 */
+            gap: 30px; /* プロジェクトアイテム間のギャップ */
+            margin-top: 30px; /* プロジェクトセクション上部の余白 */
+        }
+
+        .project-item {
+            background-color: #2a2a2a; /* プロジェクトアイテムの背景色を少し明るく */
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 5px 12px rgba(0, 0, 0, 0.3);
+            transition: transform 0.3s ease-in-out;
+            border: 1px solid transparent; /* 通常時は透明なボーダー */
+        }
+
+        .project-item:hover {
+            transform: scale(1.06); /* ホバー時、少し大きく拡大 */
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4); /* ホバー時の影をより強く */
+            border-color: #ffdd5e; /* ホバー時にボーダーを表示 */
+        }
+
+        .project-item img {
+            aspect-ratio: 1;
+            width: 100%;
+            height: auto;
+            display: block;
+            object-fit: cover;
+            transition: opacity 0.3s ease-in-out; /* 画像のopacityトランジション */
+        }
+
+        .project-item:hover img {
+            opacity: 0.9; /* ホバー時に画像を少し暗く */
+        }
+
+
+        .project-content {
+            padding: 25px; /* プロジェクトコンテンツのパディングを大きく */
+        }
+
+        .project-content h3 {
+            margin-top: 0;
+            color: #fff;
+            font-size: 1.5em; /* プロジェクトタイトルを大きく */
+            margin-bottom: 15px;
+        }
+
+        .project-content p {
+            margin-bottom: 20px; /* プロジェクト説明文の下余白を広げる */
+            color: #ddd;
+        }
+
+        /* プロジェクトボタンコンテナ */
+        .project-buttons {
+            display: flex;
+            gap: 15px; /* ボタン間の間隔 */
+            justify-content: flex-start; /* ボタンを左寄せに */
+            margin-top: 20px; /* ボタンコンテナ上部の余白 */
+        }
+
+        .project-button {
+            display: inline-block;
+            padding: 10px 20px; /* ボタンのパディング */
+            background-color: #ffdd5e; /* Playボタンの背景色を黄色に */
+            color: #222; /* Playボタンの文字色 */
+            text-decoration: none;
+            border-radius: 7px;
+            font-weight: bold;
+            letter-spacing: 0.05em;
+            transition: background-color 0.3s ease, transform 0.2s ease-in-out; /* トランジション */
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2); /* 影 */
+            border: 1px solid transparent; /* 通常時は透明なボーダー */
+        }
+
+        .project-button:hover {
+            background-color: #ffe57f; /* ホバー時の背景色 (Playボタン) */
+            transform: scale(1.05); /* ホバー時に少し拡大 */
+            box-shadow: 0 4px 8px rgba(0,0,0,0.3); /* ホバー時の影を少し強く */
+            border-color: #ffdd5e; /* ホバー時にボーダーを表示 */
+        }
+
+
+        .source-code-button {
+            display: inline-block;
+            padding: 10px 20px; /* Source Codeボタンのパディング */
+            background-color: #444; /* Source Codeボタンの背景色を濃いグレーに */
+            color: #f5f5f5; /* Source Codeボタンの文字色 */
+            text-decoration: none;
+            border-radius: 7px;
+            font-weight: bold;
+            letter-spacing: 0.05em;
+            transition: background-color 0.3s ease, transform 0.2s ease-in-out; /* トランジション */
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2); /* 影 */
+            border: 1px solid transparent; /* 通常時は透明なボーダー */
+        }
+
+        .source-code-button:hover {
+            background-color: #555; /* ホバー時の背景色 (Source Codeボタン) */
+            transform: scale(1.05); /* ホバー時に少し拡大 */
+            box-shadow: 0 4px 8px rgba(0,0,0,0.3); /* ホバー時の影を少し強く */
+            border-color: #ffdd5e; /* ホバー時にボーダーを表示 */
+        }
+
+        .project-link {
+            display: inline-block;
+            padding: 12px 25px; /* リンクボタンのパディングを大きく */
+            background-color: #ffdd5e;
+            color: #222;
+            text-decoration: none;
+            border-radius: 7px;
+            font-weight: bold;
+            letter-spacing: 0.05em;
+            transition: background-color 0.3s ease, transform 0.2s ease-in-out; /* transform を追加 */
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2); /* 影を追加 */
+        }
+
+        .project-link:hover {
+            background-color: #ffe57f; /* ホバー時、より明るい黄色に */
+            transform: scale(1.05); /* ホバー時に少し拡大 */
+            box-shadow: 0 4px 8px rgba(0,0,0,0.3); /* ホバー時の影を少し強く */
+        }
+
+        /* 連絡先セクション */
+        #contact {
+            margin-top: 70px;
+        }
+
+        #contact p {
+            font-size: 1.2em; /* メールアドレスの文字サイズを少し大きく */
+            color: #ddd;
+            margin-bottom: 0; /* 下マージンを削除 */
+        }
+
+
+        /* フッター */
+        footer {
+            text-align: center;
+            padding: 30px 0; /* フッターのパディングを大きく */
+            background-color: #181818; /* フッター背景色をボディと同じに */
+            color: #bbb;
+            position: relative;
+            width: 100%;
+            margin-top: 80px; /* フッター上部のマージンを広げる */
+            border-top: 1px solid #333; /* 上部に区切り線を追加 */
+        }
+
+        /* レスポンシブデザイン */
+        @media screen and (max-width: 768px) {
+            header {
+                padding: 40px 0;
+            }
+
+            header h1 {
+                font-size: 2.2em;
+            }
+
+            header p {
+                font-size: 1.1em;
+            }
+
+            .container {
+                width: 95%;
+                padding: 40px;
+            }
+
+            section {
+                margin-bottom: 60px;
+            }
+
+            section h2 {
+                font-size: 2em;
+                margin-bottom: 25px;
+            }
+
+            section p, section li {
+                font-size: 1em;
+            }
+
+            #skills ul.skills-list {
+                grid-template-columns: 1fr;
+                gap: 15px;
+            }
+
+            #skill-proficiency table {
+                font-size: 0.9em;
+            }
+
+            #skill-proficiency th,
+            #skill-proficiency td {
+                padding: 12px 15px;
+            }
+
+            #projects {
+                grid-template-columns: 1fr; /* 画面幅が狭い場合は1列表示 */
+                gap: 25px;
+            }
+
+            .project-content {
+                padding: 20px;
+            }
+
+            .project-content h3 {
+                font-size: 1.4em;
+            }
+
+            .project-link {
+                padding: 10px 20px;
+            }
+
+            footer {
+                padding: 25px 0;
+                margin-top: 60px;
+            }
+
+            #contact { /* 画面幅が狭い時はフォントサイズを少し小さく */
+                font-size: 0.95em;
+            }
+
+            .project-buttons { /* 画面幅が狭い時はボタン間隔を狭める */
+                gap: 10px;
+            }
+
+            .project-button, .source-code-button { /* 画面幅が狭い時はボタンのパディングを小さく */
+                padding: 8px 16px;
+                font-size: 0.95em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <canvas id="headerCanvas"></canvas>
+        <h1>ゲーム開発ポートフォリオ</h1>
+        <p>遊び心と技術力を活かしたゲーム制作</p>
+    </header>
+    <div class="container">
+        <section id="about">
+            <h2>自己紹介</h2>
+            <p>
+                ゲームプログラマーの周堡俊と申します。  「遊び心」と「技術力」を活かしたゲーム制作を心がけ、ユーザー様に心から楽しんでいただける体験を提供したいと考えています。  技術への探求心と自由な発想を大切にし、常に新しいゲーム体験の創出に情熱を燃やしています。
+            </p>
+        </section>
+
+        <section id="experience">
+            <h2>職務経歴</h2>
+            <div class="job-history">
+                <p><strong>株式会社コロプラ</strong>　2018年4月 - 現在</p>
+                <p>
+                    入社以来、7年間、主にUnityを用いたAndroid/iOS向けモバイルゲーム開発に携わってまいりました。
+                    要件定義から基本設計、詳細設計、実装、テスト、運用・保守まで、一連の開発工程を経験し、
+                    プロジェクトを成功に導くための実践的な知識と問題解決能力を培ってきました。
+                    特に、Unity Editorの拡張機能や開発ツールの設計・実装においては、開発効率の大幅な向上に貢献いたしました。
+                    また、ゲームパフォーマンスの最適化にも注力し、数々の改善を実現してまいりました。
+                </p>
+            </div>
+        </section>
+
+        <section id="skills">
+            <h2>得意な業務</h2>
+            <ul class="skills-list">
+                <li>Unityを使用したモバイルゲーム開発全般（設計、実装、運用・保守）</li>
+                <li>Unity Editorの拡張機能、開発ツール設計・実装による開発効率化</li>
+                <li>ゲームパフォーマンス最適化、品質向上</li>
+            </ul>
+        </section>
+
+        <section id="skill-proficiency">
+            <h2>スキル熟練度</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>言語/ツール</th>
+                        <th>使用年数</th>
+                        <th>熟練度</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>C#</td>
+                        <td>7年</td>
+                        <td>通常業務での使用に問題なく、指導も可能です。</td>
+                    </tr>
+                    <tr>
+                        <td>Unity</td>
+                        <td>7年</td>
+                        <td>通常業務での使用に問題なく、指導も可能です。</td>
+                    </tr>
+                    <tr>
+                        <td>Git</td>
+                        <td>8年</td>
+                        <td>通常業務での使用に問題なく、指導も可能です。</td>
+                    </tr>
+                    <tr>
+                        <td>Java</td>
+                        <td>6年</td>
+                        <td>自己研鑽</td>
+                    </tr>
+                    <tr>
+                        <td>Android</td>
+                        <td>3年</td>
+                        <td>自己研鑽</td>
+                    </tr>
+                    <tr>
+                        <td>C</td>
+                        <td>3年</td>
+                        <td>大学で使用</td>
+                    </tr>
+                    <tr>
+                        <td>JavaScript</td>
+                        <td>1年</td>
+                        <td>自己研鑽</td>
+                    </tr>
+                    <tr>
+                        <td>Python</td>
+                        <td>1年</td>
+                        <td>大学で使用</td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+
+
+        <section id="projects">
+            <h2>個人作品</h2>
+            <section id="projects-content">
+                <div class="project-item">
+                    <img src="./plane.gif" alt="スクリーンショット">
+                    <div class="project-content">
+                        <h3>空戦ゲーム</h3>
+                        <p>
+                            JavaScriptを学習初期に制作した、シューティングゲームです。
+                            3種類の敵とボス戦、2種類のプレイヤースキルを実装しました。
+                            JavaScriptでのゲーム開発の基礎を学ぶ良い機会となりました。
+                            Android版も開発しており、クロスプラットフォーム開発への挑戦も行いました。
+                        </p>
+                        <p>使用技術: JavaScript</p>
+                        <div class="project-buttons">
+                            <a href="[Playへのリンク]" class="project-button">プレイ</a>
+                        </div>
+                        <div class="project-buttons">
+                            <a href="https://github.com/dklaputa/MyHomePage/tree/master/game" class="source-code-button" target="_blank">Source Code</a>
+                            <a href="https://github.com/dklaputa/PlaneWarGame" class="source-code-button" target="_blank">Source Code (Android)</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="project-item">
+                    <img src="./brick.gif" alt="スクリーンショット">
+                    <div class="project-content">
+                        <h3>Brick Breaker!</h3>
+                        <p>
+                            Unityで制作したブロック崩しゲームです。  単なるブロック崩しにとどまらず、ロープ操作でボールを射出するという独自のシステムを導入することで、既存のブロック崩しとは一味違う、新しい楽しさを提供することを目指しました。
+                        </p>
+                        <p>使用技術: Unity</p>
+                        <div class="project-buttons">
+                            <a href="[Playへのリンク]" class="project-button">プレイ</a>
+                            <a href="https://github.com/dklaputa/BrickBreaker" class="source-code-button" target="_blank">Source Code</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="project-item">
+                    <img src="[プロジェクト画像のURL]" alt="スクリーンショット">
+                    <div class="project-content">
+                        <h3>草地シミュレーション</h3>
+                        <p>
+                            ゲームではありませんが、Compute Shaderの学習時に制作した作品です。
+                            UnityのCompute Shaderを活用し、リアルタイムな草地の生成を試みました。
+                            GPUを用いた並列処理によるパフォーマンス向上を学ぶことができました。
+                        </p>
+                        <p>使用技術: Unity, ComputeShader</p>
+                        <a href="[Androidソースコードへのリンク]" class="source-code-button" target="_blank">Source Code</a>
+                    </div>
+                </div>
+                <div class="project-item">
+                    <img src="./ecs.gif" alt="スクリーンショット">
+                    <div class="project-content">
+                        <h3>大規模経路探索テスト</h3>
+                        <p>
+                            Unity AI Navigationの性能検証と最適化を目的としたプロジェクトです。
+                            大量Agent環境下でのパフォーマンス課題に取り組み、
+                            Unity ECSでのAgentの経路探索、衝突回避ゲームシステム実装により、
+                            大幅なパフォーマンス向上を実現しました。
+                            Pixel 9 Proでの検証では、1万Agent同時に経路探索を行う時のフレームレートを15fpsから82fpsまで向上させることに成功しました。
+                        </p>
+                        <p>使用技術: Unity, Unity ECS, Navmesh</p>
+                        <a href="https://github.com/dklaputa/ECS-Navmesh-public" class="source-code-button" target="_blank">Source Code</a>
+                    </div>
+                </div>
+            </section>
+        </section>
+
+        <section id="contact">
+            <h2>ご連絡先</h2>
+            <p>E-mail: d.k.laputa@gmail.com</p>
+        </section>
+    </div>
+    <footer>
+        <p>© 2025 dklaputa</p>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const canvas = document.getElementById('headerCanvas');
+            const ctx = canvas.getContext('2d');
+            canvas.width = window.innerWidth;
+            canvas.height = header.offsetHeight;
+
+            window.addEventListener('resize', () => {
+                canvas.width = window.innerWidth;
+                canvas.height = header.offsetHeight;
+                init();
+            });
+
+            let particles = [];
+
+            function init() {
+                particles = [];
+                for (let i = 0; i < canvas.width / 10; i++) {
+                    particles.push({
+                        x: Math.random() * canvas.width,
+                        y: Math.random() * canvas.height,
+                        size: Math.random() * 2 + 1,
+                        speedX: Math.random() * 1 - 0.5,
+                        speedY: Math.random() * 1 - 0.5,
+                        color: `rgba(255, 221, 94, ${Math.random() * 0.6 + 0.4})` /* より明るい黄色 */
+                    });
+                }
+            }
+
+            function drawParticles() {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                particles.forEach(p => {
+                    ctx.beginPath();
+                    ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+                    ctx.fillStyle = p.color;
+                    ctx.fill();
+                    p.x += p.speedX;
+                    p.y += p.speedY;
+
+                    if (p.x < 0 || p.x > canvas.width) p.speedX *= -1;
+                    if (p.y < 0 || p.y > canvas.height) p.speedY *= -1;
+                });
+            }
+
+            function animate() {
+                drawParticles();
+                requestAnimationFrame(animate);
+            }
+
+            init();
+            animate();
+        });
+
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                document.querySelector(this.getAttribute('href')).scrollIntoView({
+                    behavior: 'smooth'
+                });
+            });
+        });
+    </script>
+</body>
+</html>
